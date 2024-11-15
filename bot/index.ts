@@ -22,14 +22,21 @@ bot.command('help', (ctx: any) => {
 });
 
 bot.command('webapp', (ctx: any) => {
-  ctx.reply('Open Web App', {
-    reply_markup: {
-      inline_keyboard: [[
-        { text: "Open App", web_app: { url: WEBAPP_URL || '' }}
-      ]]
-    }
+    const chatId = ctx.chat.id;
+    // Encode le chatId en base64
+    const encodedGroupId = Buffer.from(chatId.toString()).toString('base64');
+    
+    console.log('Chat ID:', chatId);
+    console.log('Encoded Group ID:', encodedGroupId);
+    
+    ctx.reply('Open Web App', {
+      reply_markup: {
+        inline_keyboard: [[
+          { text: "Open App", url: `${WEBAPP_URL}?startapp=${encodedGroupId}` }
+        ]]
+      }
+    });
   });
-});
 
 bot.launch().then(() => {
   console.log('Bot is running...');
